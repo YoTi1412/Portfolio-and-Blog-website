@@ -123,3 +123,45 @@ export const getPortfolioSlugs = async () =>
 
   return await graphQLClient.request(query);
 };
+
+export const getBlogSlugs = async () =>
+{
+  const query = gql`
+      {
+        posts {
+          slug
+        }
+      }
+    `;
+
+  return await graphQLClient.request(query);
+};
+
+export const getPost = async (slug) =>
+{
+  const query = gql`
+  query getPost($slug: String!) {
+    posts(where: {slug: $slug}) {
+      title
+      slug
+      description
+      date
+      content
+      tags
+      author {
+        name
+        image {
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+      `;
+
+  const variables = {
+    slug,
+  };
+  return await graphQLClient.request(query, variables);
+};

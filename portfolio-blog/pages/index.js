@@ -26,8 +26,6 @@ export default function Home ({ data })
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Welcome to our Portfolio & Blog App</h1>
-
       <div>
         {data?.portfolios.map((item) => (
           <div key={item.slug}>
