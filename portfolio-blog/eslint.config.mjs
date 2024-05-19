@@ -1,10 +1,19 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+const globals = require("globals");
+const pluginJs = require("@eslint/js");
+const pluginReactConfig = require("eslint-plugin-react/configs/recommended.js");
 
-
-export default [
-  {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
-  pluginReactConfig,
-];
+module.exports = {
+  globals: globals.browser,
+  overrides: [
+    {
+      files: ["*.js"],
+      processor: "@eslint/js",
+      rules: pluginJs.configs.recommended.rules,
+    },
+    {
+      files: ["*.jsx"],
+      extends: ["plugin:react/recommended"],
+      rules: pluginReactConfig.rules,
+    },
+  ],
+};
