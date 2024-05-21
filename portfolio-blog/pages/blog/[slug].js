@@ -1,5 +1,10 @@
 import Head from "next/head";
+import Image from "next/image";
 import { getBlogSlugs, getPost } from "../../lib/data";
+import { MDXRemote } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import he from "he";
+
 
 export const getStaticPaths = async () =>
 {
@@ -16,14 +21,16 @@ export const getStaticProps = async ({ params }) =>
 {
 
     const post = await getPost(params.slug);
+    const content = await serialize(he.decode(post.posts[ 0 ].content));
     return {
         props: {
             post: post.posts[ 0 ],
+            content,
         },
     };
 };
 
-export default function Portfolio ({ post })
+export default function Portfolio ({ post, content })
 {
     console.log(post);
 
@@ -38,6 +45,29 @@ export default function Portfolio ({ post })
 
             <div>
                 <h1>{post.title}</h1>
+                <p>{new Date(post.date).toDateString()}</p>
+                <p>{post.description}</p>
+                <div>
+                    <p>
+                        {post.author.name}
+                        {post.author.image && (
+                            <Image
+                                src={post.author.image.url}
+                                width={post.author.image.width / 3}
+                                height={post.author.image.height / 3}
+                                alt={post.author.name}
+                            />
+                        )}
+                    </p>
+                </div>
+                <div>
+                    {post.tags && post.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                    ))}
+                </div>
+                <div>
+                    <MDXRemote {...content} />
+                </div>
             </div>
         </div>
     );

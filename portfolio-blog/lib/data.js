@@ -47,6 +47,7 @@ export const getPortfolioItems = async () =>
         title
         slug
         description
+        tags
         date
         coverImage {
           url
@@ -93,6 +94,7 @@ export const getPortfolioItem = async (slug) =>
         title
         slug
         description
+        tags
         date
         coverImage {
           url
