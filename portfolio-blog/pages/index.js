@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
-import { getPostsAndPortfolio } from "../lib/data";
+import Image from "next/legacy/image";
+import { getPostsAndPortfolio } from "@/lib/data";
+import Hero from "@/components/Hero";
 
 export const getStaticProps = async () =>
 {
@@ -14,6 +16,7 @@ export const getStaticProps = async () =>
 
 export default function Home ({ data })
 {
+  console.log(data);
   return (
     <div>
       <Head>
@@ -25,22 +28,50 @@ export default function Home ({ data })
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Hero />
 
-      <div>
-        {data?.portfolios.map((item) => (
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-0">
+        {data?.portfolios?.map((item) => (
           <div key={item.slug}>
             <Link href={`/portfolio/${item.slug}`}>
-              {item.title}
+              <span>
+                <div className="relative mb-10">
+                  <div className="absolute w-full h-full z-10 opacity-80 bg-green-900"></div>
+                  <div className="absolute w-full h-full z-20 flex flex-col justify-center items-center text-center px-4">
+                    <h3 className="text-white font-semibold text-2xl">{item.title}</h3>
+                    <p className="text-gray-50 text-lg mt-4 leading-relaxed hidden md:flex">
+                      {item.description}
+                    </p>
+                    <div className="mt-4">
+                      {item.tags && item.tags.map((tag) => (
+                        <span
+                          className="text-white uppercase text-sm tracking-wide m-2 bg-green-700 px-2 py-1 rounded-lg"
+                          key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <Image
+                    src={item.coverImage.url}
+                    height={item.coverImage.height}
+                    objectFit="cover"
+                    width={item.coverImage.width}
+                    className="absolute"
+                  />
+                </div>
+              </span>
             </Link>
           </div>
         ))}
       </div>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-0">
-        <div className="mt-10">
-          {data?.posts.map((post) => (
-            <div className="grid grid-cols-1 md:grid-cols-4 py-6" key={post.slug}>
-              <div className="mb-2 md:mb-6 md:col-span-1">
+        <div className="mt-20 ">
+          <div className="text-4xl text-gray-900 font-semibold mb-4">Recent Posts</div>
+          {data?.posts?.map((post) => (
+            <div key={post.slug} className="grid grid-cols-1 md:grid-cols-4 py-6">
+              <div className="mb-2 md:mb-0 md:col-span-1">
                 <p className="text-gray-600 text-sm">{new Date(post.date).toDateString()}</p>
               </div>
               <div className="md:col-span-3">
@@ -49,12 +80,8 @@ export default function Home ({ data })
                     {post.title}
                   </span>
                 </Link>
-                <p className="text-gray-700 leading-relaxed">
-                  {post.description}
-                </p>
-                <div className="text-sm text-gray-900 font-semibold mt-1">
-                  {post.author.name}
-                </div>
+                <p className="text-gray-700 leading-relaxed">{post.description}</p>
+                <div className="text-sm text-gray-900 font-semibold mt-1">{post.author.name}</div>
               </div>
             </div>
           ))}

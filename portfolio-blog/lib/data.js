@@ -7,18 +7,19 @@ export const getPostsAndPortfolio = async () =>
 {
   const query = gql`
     {
-      portfolios {
+      portfolios(first: 3, orderBy: date_DESC) {
         title
+        tags
         slug
         description
         date
         coverImage {
           url
-          height
           width
+          height
         }
       }
-      posts {
+      posts(first: 3, orderBy: date_DESC) {
         title
         slug
         description
@@ -43,16 +44,16 @@ export const getPortfolioItems = async () =>
 {
   const query = gql`
     {
-      portfolios {
+      portfolios(orderBy: date_DESC) {
         title
+        tags
         slug
         description
-        tags
         date
         coverImage {
           url
-          height
           width
+          height
         }
       }
     }
@@ -65,7 +66,7 @@ export const getPosts = async () =>
 {
   const query = gql`
     {
-      posts {
+      posts(orderBy: date_DESC) {
         title
         slug
         description
@@ -92,14 +93,14 @@ export const getPortfolioItem = async (slug) =>
     query getPortfolio($slug: String!) {
       portfolios(where: { slug: $slug }) {
         title
+        tags
         slug
         description
-        tags
         date
         coverImage {
           url
-          height
           width
+          height
         }
         content
       }
@@ -129,12 +130,12 @@ export const getPortfolioSlugs = async () =>
 export const getBlogSlugs = async () =>
 {
   const query = gql`
-      {
-        posts {
-          slug
-        }
+    {
+      posts {
+        slug
       }
-    `;
+    }
+  `;
 
   return await graphQLClient.request(query);
 };
@@ -142,28 +143,29 @@ export const getBlogSlugs = async () =>
 export const getPost = async (slug) =>
 {
   const query = gql`
-  query getPost($slug: String!) {
-    posts(where: {slug: $slug}) {
-      title
-      slug
-      description
-      date
-      content
-      tags
-      author {
-        name
-        image {
-          url
-          width
-          height
+    query getPost($slug: String!) {
+      posts(where: { slug: $slug }) {
+        title
+        slug
+        description
+        date
+        content
+        tags
+        author {
+          name
+          image {
+            url
+            width
+            height
+          }
         }
       }
     }
-  }
-      `;
+  `;
 
   const variables = {
     slug,
   };
+
   return await graphQLClient.request(query, variables);
 };
