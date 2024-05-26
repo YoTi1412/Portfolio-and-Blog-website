@@ -42,20 +42,23 @@ export default function Portfolio ({ portfolioItem, content })
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div>
-                <h1>{portfolioItem.title}</h1>
-                <p>{new Date(portfolioItem.date).toDateString()}</p>
-                <p>{portfolioItem.description}</p>
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-0">
+                <h1 className="text-6xl text-gray-900 font-bold selection:text-green-700">{portfolioItem.title}</h1>
+                <div className="flex justify-between items-center mt-4">
+                    <p className="text-gray-700 selection:text-green-700">{new Date(portfolioItem.date).toDateString()}</p>
+                    <div>
+                        {portfolioItem.tags && portfolioItem.tags.map((tag) => (
+                            <span className="uppercase text-sm tracking-wide m-2 bg-green-200 px-2 py-1 rounded-lg text-green-700" key={tag}>{tag}</span>
+                        ))}
+                    </div>
+                </div>
+                <p className="prose prose-xl py-4 selection:text-green-700">{portfolioItem.description}</p>
                 <Image
                     src={portfolioItem.coverImage.url}
                     width={portfolioItem.coverImage.width}
                     height={portfolioItem.coverImage.height} />
-                <div>
-                    {portfolioItem.tags && portfolioItem.tags.map((tag) => (
-                        <span key={tag}>{tag}</span>
-                    ))}
-                </div>
-                <div>
+
+                <div className="prose prose-xl max-w-none mt-4 selection:bg-green-300 selection:text-green-900">
                     <MDXRemote {...content} />
                 </div>
             </div>
