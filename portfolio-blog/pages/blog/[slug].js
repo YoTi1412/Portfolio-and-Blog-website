@@ -5,40 +5,43 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import he from "he";
 
-
-export const getStaticPaths = async () =>
-{
+// Function to generate static paths for each blog post
+export const getStaticPaths = async () => {
+    // Fetching all blog slugs
     const slugsResponse = await getBlogSlugs();
     const slugs = slugsResponse.posts;
 
     return {
+        // Mapping slugs to paths
         paths: slugs.map((slug) => ({ params: { slug: slug.slug } })),
         fallback: false,
     };
 };
 
-export const getStaticProps = async ({ params }) =>
-{
-
+// Function to fetch the necessary data for a blog post
+export const getStaticProps = async ({ params }) => {
+    // Fetching the blog post using the slug from params
     const post = await getPost(params.slug);
-    const content = await serialize(he.decode(post.posts[ 0 ].content));
+    // Serializing the post content to MDX format
+    const content = await serialize(he.decode(post.posts[0].content));
+    
     return {
         props: {
-            post: post.posts[ 0 ],
+            post: post.posts[0],
             content,
         },
     };
 };
 
-export default function Portfolio ({ post, content })
-{
+// Component to display the blog post
+export default function Portfolio({ post, content }) {
     console.log(post);
 
     return (
         <div>
             <Head>
-                <title>{getPost.title} | Portfolio & Blog App</title>
-                <meta name="descripion" content="An awesome Portfolio & Blog App made with love by: 'YoTi' & 'Ali'" />
+                <title>{post.title} | Portfolio & Blog App</title>
+                <meta name="description" content="An awesome Portfolio & Blog App made with love by: 'YoTi' & 'Ali'" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
