@@ -143,25 +143,25 @@ export const getBlogSlugs = async () =>
 export const getPost = async (slug) =>
 {
   const query = gql`
-    query getPost($slug: String!) {
-      posts(where: { slug: $slug }) {
-        title
-        slug
-        description
-        date
-        content
-        tags
-        author {
-          name
-          image {
-            url
-            width
-            height
+      query getPost($slug: String!) {
+        posts(where: { slug: $slug }) {
+          title
+          slug
+          description
+          date
+          content
+          tags
+          author {
+            name
+            image {
+              url
+              width
+              height
+            }
           }
         }
       }
-    }
-  `;
+    `;
 
   const variables = {
     slug,

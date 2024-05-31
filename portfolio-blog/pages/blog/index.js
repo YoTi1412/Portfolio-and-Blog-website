@@ -5,10 +5,8 @@ import useSWR from "swr";
 
 const fetcher = ({ endpoint, query, variables }) => request(endpoint, query, variables);
 
-export const getStaticProps = async () =>
-{
-    try
-    {
+export const getStaticProps = async () => {
+    try {
         const data = await fetcher({
             endpoint: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clw4uvypz0qfu07w8qjut1hbw/master",
             query: `
@@ -32,8 +30,7 @@ export const getStaticProps = async () =>
                 posts: data.posts || [],
             },
         };
-    } catch (error)
-    {
+    } catch (error) {
         console.error("Error fetching static props:", error);
         return {
             props: {
@@ -44,20 +41,18 @@ export const getStaticProps = async () =>
     }
 };
 
-export default function BlogPage ({ posts, error: initialError })
-{
-    const [ searchValue, setSearchValue ] = useState("");
+export default function BlogPage({ posts, error: initialError }) {
+    const [searchValue, setSearchValue] = useState("");
     const { data = { posts: [] }, error } = useSWR(
         {
             endpoint: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clw4uvypz0qfu07w8qjut1hbw/master",
             query: `
                 query getPosts($searchValue: String) {
                     posts(orderBy: date_DESC, where: { title_contains: $searchValue }) {
-                        id
                         title
-                        date
                         slug
                         description
+                        date
                         author {
                             name
                         }
@@ -70,8 +65,7 @@ export default function BlogPage ({ posts, error: initialError })
         { initialData: { posts }, revalidateOnFocus: true }
     );
 
-    if (initialError || error)
-    {
+    if (initialError || error) {
         return (
             <div>
                 <h2 className="flex justify-center mb-10 mt-10 font-semibold text-3xl text-green-800">There was an error with the data fetching.</h2>
